@@ -1,7 +1,10 @@
-package com.app.ams
+package com.app.ams.activities
 
 import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
+
+import com.app.ams.R
 
 class MainActivity : AppCompatActivity()
 {
