@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">AMS</string>
+
+    <string name="enter_username">Enter username</string>
+    <string name="enter_password">Enter password</string>
+
+    <string name="login">Login</string>
+    <string name="loading">Loading…</string>
+    <string name="log_out">Log Out</string>
 </resources>

@@ -7,7 +7,7 @@ import java.net.HttpURLConnection
 
 import com.app.ams.Constant
 
-class Api()
+class Api
 {
     companion object
     {
