@@ -1,4 +1,4 @@
-package com.app.ams.features.auth.login
+package com.app.ams.api.auth.login
 
 import com.google.gson.Gson
 
