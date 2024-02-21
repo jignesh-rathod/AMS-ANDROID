@@ -8,18 +8,17 @@ import kotlinx.coroutines.CoroutineScope
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
-import android.widget.Toast
 import android.widget.Button
 import android.content.Intent
 import android.widget.EditText
-import android.annotation.SuppressLint
 
 import java.net.HttpURLConnection
 
 import com.app.ams.R
-import com.app.ams.features.auth.login.LoginHandler
-import com.app.ams.features.auth.login.LoginRequest
-import com.app.ams.features.auth.login.LoginHandler.Companion.asLoginResponse
+import com.app.ams.api.auth.login.LoginHandler
+import com.app.ams.api.auth.login.LoginRequest
+import com.app.ams.api.auth.login.LoginHandler.Companion.asLoginResponse
+import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : AppCompatActivity()
 {
@@ -39,7 +38,6 @@ class LoginActivity : AppCompatActivity()
         btnLogin.setOnClickListener { handleLogin() }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun handleLogin()
     {
         btnLogin.isEnabled = false
@@ -58,10 +56,10 @@ class LoginActivity : AppCompatActivity()
                 val data = response.asLoginResponse()
 
                 withContext(Dispatchers.Main) {
-                    val editor = getSharedPreferences("ams", MODE_PRIVATE).edit()
+                    val prefsEditor = getSharedPreferences("ams", MODE_PRIVATE).edit()
 
-                    editor.putString("AMS_TOKEN", data.token)
-                    editor.apply()
+                    prefsEditor.putString("AMS_TOKEN", data.token)
+                    prefsEditor.apply()
 
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
@@ -70,11 +68,7 @@ class LoginActivity : AppCompatActivity()
             else if (response.statusCode == HttpURLConnection.HTTP_FORBIDDEN)
             {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "Wrong username or password",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Snackbar.make(btnLogin, "Wrong username or password", Snackbar.LENGTH_LONG).show()
 
                     btnLogin.isEnabled = true
                     btnLogin.text = resources.getString(R.string.login)
