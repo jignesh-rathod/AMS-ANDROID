@@ -7,4 +7,7 @@
     <string name="login">Login</string>
     <string name="loading">Loading…</string>
     <string name="log_out">Log Out</string>
+    <string name="app_logo">App Logo</string>
+    <string name="login_to_continue">Login to continue</string>
+    <string name="enter_your_username_and_password_to_login"><![CDATA[Enter your username & password to login]]></string>
 </resources>
