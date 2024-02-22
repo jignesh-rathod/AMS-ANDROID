@@ -13,27 +13,31 @@ import com.app.ams.R
 import com.app.ams.api.profile.get.GetProfileHandler
 import com.app.ams.api.profile.get.GetProfileHandler.Companion.asGetProfileResponse
 import com.app.ams.dialogs.SessionExpireDialog
-import com.app.ams.fragments.AttendanceFragment
-import com.app.ams.fragments.HomeFragment
-import com.app.ams.fragments.ProfileFragment
+import com.app.ams.fragments.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
 
 class MainActivity : AppCompatActivity()
 {
-    private lateinit var bottomNav: BottomNavigationView
     private lateinit var btnLogOut: ImageView
     private lateinit var imgProfile: ImageView
+    private lateinit var bottomNav: BottomNavigationView
 
-    private lateinit var homeFragment: HomeFragment
+    private lateinit var dashboardFragment: DashboardFragment
     private lateinit var attendanceFragment: AttendanceFragment
     private lateinit var profileFragment: ProfileFragment
+
+    private lateinit var studentDashboardFragment: StudentDashboardFragment
+    private lateinit var studentProfileFragment: StudentProfileFragment
+
+    private lateinit var userType: String
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -44,7 +48,10 @@ class MainActivity : AppCompatActivity()
 
         val token = getSharedPreferences("ams", MODE_PRIVATE).getString("AMS_TOKEN", "")
         if (token == "")
+        {
             logOut()
+            return
+        }
 
         imgProfile = findViewById(R.id.imgProfile)
         bottomNav = findViewById(R.id.bottomNav)
@@ -53,15 +60,23 @@ class MainActivity : AppCompatActivity()
 
         CoroutineScope(Dispatchers.IO).launch {
             setProfileData()
+            setProfileImage(getUserImageName())
 
-            val userType = getUserType()
             setBottomNav(userType)
 
-            homeFragment = HomeFragment()
-            attendanceFragment = AttendanceFragment()
-            profileFragment = ProfileFragment()
-
-            setCurrentFragment(homeFragment)
+            if (userType == Constant.USERTYPE_STUDENT)
+            {
+                studentDashboardFragment = StudentDashboardFragment()
+                studentProfileFragment = StudentProfileFragment()
+                setCurrentFragment(studentDashboardFragment)
+            }
+            else
+            {
+                dashboardFragment = DashboardFragment()
+                attendanceFragment = AttendanceFragment()
+                profileFragment = ProfileFragment()
+                setCurrentFragment(dashboardFragment)
+            }
 
             bottomNav.setOnItemSelectedListener(::changeFragment)
         }
@@ -83,9 +98,9 @@ class MainActivity : AppCompatActivity()
             HttpURLConnection.HTTP_OK ->
             {
                 val data = response.asGetProfileResponse()
-                setProfileImage(data.imageName)
 
                 withContext(Dispatchers.Main) {
+                    userType = data.userType
                     val prefsEditor = getSharedPreferences("ams", MODE_PRIVATE).edit()
 
                     prefsEditor.putString("USERTYPE", data.userType)
@@ -113,11 +128,20 @@ class MainActivity : AppCompatActivity()
     private suspend fun setProfileImage(imageName: String)
     {
         withContext(Dispatchers.IO) {
-            val url = URL(Constant.UPLOADS_BASE_URL + "/images/" + imageName)
-            val bmp = BitmapFactory.decodeStream(
-                url.openConnection().getInputStream()
-            )
-            imgProfile.setImageBitmap(bmp)
+            try
+            {
+                val url = URL(Constant.UPLOADS_BASE_URL + "/images/" + imageName)
+                val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+
+                withContext(Dispatchers.Main) {
+                    imgProfile.setImageBitmap(bmp)
+                }
+            } catch (e: IOException)
+            {
+                withContext(Dispatchers.Main) {
+                    imgProfile.setImageResource(R.drawable.ic_profile)
+                }
+            }
         }
     }
 
@@ -126,8 +150,8 @@ class MainActivity : AppCompatActivity()
         val menu = bottomNav.menu
 
         withContext(Dispatchers.Main) {
-            val homeMenu = menu.add(Menu.NONE, 1, 1, "Home")
-            homeMenu.setIcon(R.drawable.ic_home)
+            val dashboardMenu = menu.add(Menu.NONE, 1, 1, "Dashboard")
+            dashboardMenu.setIcon(R.drawable.ic_dashboard)
 
             if (userType != Constant.USERTYPE_STUDENT)
             {
@@ -140,14 +164,14 @@ class MainActivity : AppCompatActivity()
         }
     }
 
-    private suspend fun getUserType(): String
+    private suspend fun getUserImageName(): String
     {
-        var userType: String
+        var imageName: String
         withContext(Dispatchers.Main) {
-            userType = getSharedPreferences("ams", MODE_PRIVATE).getString("USERTYPE", "").toString()
+            imageName = getSharedPreferences("ams", MODE_PRIVATE).getString("IMAGE_NAME", "").toString()
         }
 
-        return userType
+        return imageName
     }
 
     private fun setCurrentFragment(fragment: Fragment)
@@ -160,11 +184,22 @@ class MainActivity : AppCompatActivity()
 
     private fun changeFragment(it: MenuItem): Boolean
     {
-        when (it.itemId)
+        if (userType == Constant.USERTYPE_STUDENT)
         {
-            1 -> setCurrentFragment(homeFragment)
-            2 -> setCurrentFragment(attendanceFragment)
-            3 -> setCurrentFragment(profileFragment)
+            when (it.itemId)
+            {
+                1 -> setCurrentFragment(studentDashboardFragment)
+                3 -> setCurrentFragment(studentProfileFragment)
+            }
+        }
+        else
+        {
+            when (it.itemId)
+            {
+                1 -> setCurrentFragment(dashboardFragment)
+                2 -> setCurrentFragment(attendanceFragment)
+                3 -> setCurrentFragment(profileFragment)
+            }
         }
         return true
     }
