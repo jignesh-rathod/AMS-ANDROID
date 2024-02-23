@@ -93,6 +93,7 @@ class MainActivity : AppCompatActivity()
                 withContext(Dispatchers.Main) {
                     SessionExpireDialog.show(this@MainActivity)
                 }
+                userType = ""
             }
 
             HttpURLConnection.HTTP_OK ->

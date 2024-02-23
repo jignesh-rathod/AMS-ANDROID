@@ -10,4 +10,10 @@
     <string name="app_logo">App Logo</string>
     <string name="login_to_continue">Login to continue</string>
     <string name="enter_your_username_and_password_to_login"><![CDATA[Enter your username & password to login]]></string>
+    <string name="batch">Batch</string>
+    <string name="semester">Semester</string>
+    <string name="division">Division</string>
+    <string name="subject">Subject</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
 </resources>
