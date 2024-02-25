@@ -22,8 +22,8 @@ import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : AppCompatActivity()
 {
-    private lateinit var txtUsername: EditText
-    private lateinit var txtPassword: EditText
+    private lateinit var etUsername: EditText
+    private lateinit var etPassword: EditText
     private lateinit var btnLogin: Button
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -31,8 +31,8 @@ class LoginActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        txtUsername = findViewById(R.id.txtUsername)
-        txtPassword = findViewById(R.id.txtPassword)
+        etUsername = findViewById(R.id.etUsername)
+        etPassword = findViewById(R.id.etPassword)
         btnLogin = findViewById(R.id.btnLogin)
 
         btnLogin.setOnClickListener { handleLogin() }
@@ -44,8 +44,8 @@ class LoginActivity : AppCompatActivity()
         btnLogin.text = resources.getString(R.string.loading)
 
         val loginRequest = LoginRequest(
-            username = txtUsername.text.toString(),
-            password = txtPassword.text.toString()
+            username = etUsername.text.toString(),
+            password = etPassword.text.toString()
         )
 
         CoroutineScope(Dispatchers.IO).launch {

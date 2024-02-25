@@ -16,4 +16,7 @@
     <string name="subject">Subject</string>
     <string name="time">Time</string>
     <string name="date">Date</string>
+    <string name="add">Add</string>
+    <string name="insert">Insert</string>
+    <string name="cancel">Cancel</string>
 </resources>
