@@ -51,6 +51,8 @@ import kotlin.collections.ArrayList
 
 class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedChangeListener
 {
+    data class DateDetails(val day: Int, val month: Int, val year: Int)
+
     private lateinit var progressBar: ProgressBar
     private lateinit var addAttendanceForm: ConstraintLayout
     private lateinit var insertAttendanceForm: ConstraintLayout
@@ -80,7 +82,9 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
     private var selectedDivisionId: Int? = null
     private var selectedSubjectId: Int? = null
     private var selectedTimeId: Int? = null
+
     private lateinit var selectedDate: String
+    private lateinit var currentDate: String
 
     private var studentDataForInsertAttendance: ArrayList<Student>? = null
 
@@ -92,35 +96,18 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
         rootView = inflater.inflate(R.layout.fragment_attendance, container, false)
         context = requireContext()
 
-        progressBar = rootView.findViewById(R.id.progressBar)
-        addAttendanceForm = rootView.findViewById(R.id.addAttendanceForm)
-        insertAttendanceForm = rootView.findViewById(R.id.insertAttendanceForm)
+        initialize()
 
-        ddBatch = rootView.findViewById(R.id.ddBatch)
-        ddSemester = rootView.findViewById(R.id.ddSemester)
-        ddDivision = rootView.findViewById(R.id.ddDivision)
-        ddSubject = rootView.findViewById(R.id.ddSubject)
-        ddTime = rootView.findViewById(R.id.ddTime)
-        etDate = rootView.findViewById(R.id.etDate)
-        btnAdd = rootView.findViewById(R.id.btnAdd)
+        val date = fetchCurrentDate()
+        currentDate = "${date.day}/${date.month + 1}/${date.year}"
+        selectedDate = "${date.year}-${date.month + 1}-${date.day}"
 
-        rvStudents = rootView.findViewById(R.id.rvStudents)
-        btnInsert = rootView.findViewById(R.id.btnInsert)
-        btnCancel = rootView.findViewById(R.id.btnCancel)
-
-        val calendar: Calendar = Calendar.getInstance()
-        val year: Int = calendar.get(Calendar.YEAR)
-        val month: Int = calendar.get(Calendar.MONTH)
-        val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
-        val currentDate = "$day/${month + 1}/$year"
-
-        selectedDate = "$year-$month-$day"
         etDate.setText(currentDate)
-        etDate.setOnClickListener { showDatePickerDialog(day, month, year) }
+        etDate.setOnClickListener { showDatePickerDialog(date.day, date.month, date.year) }
 
         dateSetListener = OnDateSetListener { _: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
             val selectedDate = dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
-            this.selectedDate = "$year-$monthOfYear-$dayOfMonth"
+            this.selectedDate = "$year-${monthOfYear + 1}-$dayOfMonth"
             etDate.setText(selectedDate)
         }
 
@@ -140,6 +127,35 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
     {
         if (studentDataForInsertAttendance != null)
             studentDataForInsertAttendance!![position].isPresent = isChecked
+    }
+
+    private fun initialize()
+    {
+        progressBar = rootView.findViewById(R.id.progressBar)
+        addAttendanceForm = rootView.findViewById(R.id.addAttendanceForm)
+        insertAttendanceForm = rootView.findViewById(R.id.insertAttendanceForm)
+
+        ddBatch = rootView.findViewById(R.id.ddBatch)
+        ddSemester = rootView.findViewById(R.id.ddSemester)
+        ddDivision = rootView.findViewById(R.id.ddDivision)
+        ddSubject = rootView.findViewById(R.id.ddSubject)
+        ddTime = rootView.findViewById(R.id.ddTime)
+        etDate = rootView.findViewById(R.id.etDate)
+        btnAdd = rootView.findViewById(R.id.btnAdd)
+
+        rvStudents = rootView.findViewById(R.id.rvStudents)
+        btnInsert = rootView.findViewById(R.id.btnInsert)
+        btnCancel = rootView.findViewById(R.id.btnCancel)
+    }
+
+    private fun fetchCurrentDate(): DateDetails
+    {
+        val calendar: Calendar = Calendar.getInstance()
+        val year: Int = calendar.get(Calendar.YEAR)
+        val month: Int = calendar.get(Calendar.MONTH)
+        val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
+
+        return DateDetails(day, month, year)
     }
 
     private fun showDatePickerDialog(day: Int, month: Int, year: Int)
@@ -192,7 +208,7 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
                     }
                 }
 
-                HttpURLConnection.HTTP_OK ->
+                HttpURLConnection.HTTP_CREATED ->
                 {
                     withContext(Dispatchers.Main) {
                         Snackbar.make(btnInsert, "Attendance Added Successfully.", Snackbar.LENGTH_LONG).show()
@@ -200,6 +216,10 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
                 }
             }
         }
+
+        resetAddAttendanceFormFields()
+        insertAttendanceForm.visibility = View.GONE
+        addAttendanceForm.visibility = View.VISIBLE
     }
 
     private fun handleCancel()
@@ -410,5 +430,36 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
                 }
             }
         }
+    }
+
+    private fun resetAddAttendanceFormFields()
+    {
+        val date = fetchCurrentDate()
+        currentDate = "${date.day}/${date.month + 1}/${date.year}"
+        selectedDate = "${date.year}-${date.month + 1}-${date.day}"
+        etDate.setText(currentDate)
+
+        studentDataForInsertAttendance = null
+
+        ddBatch.setText("")
+        oldSelectedBatchPosition = -1
+        selectedBatchId = null
+
+        ddSemester.clearListSelection()
+        ddSemester.setText("")
+        oldSelectedSemesterPosition = -1
+        selectedSemesterId = null
+
+        ddDivision.clearListSelection()
+        ddDivision.setText("")
+        selectedDivisionId = null
+
+        ddSubject.clearListSelection()
+        ddSubject.setText("")
+        selectedSubjectId = null
+
+        ddTime.clearListSelection()
+        ddTime.setText("")
+        selectedTimeId = null
     }
 }

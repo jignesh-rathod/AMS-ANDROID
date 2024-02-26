@@ -38,7 +38,8 @@ class Api
                 writer.close()
             }
 
-            val reader = if (connection.responseCode == HttpURLConnection.HTTP_OK) connection.inputStream.bufferedReader() else connection.errorStream.bufferedReader()
+            val reader =
+                if (connection.responseCode == HttpURLConnection.HTTP_OK || connection.responseCode == HttpURLConnection.HTTP_CREATED) connection.inputStream.bufferedReader() else connection.errorStream.bufferedReader()
             val response = reader.readText()
 
             reader.close()
