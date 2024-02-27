@@ -45,6 +45,7 @@ import com.app.ams.api.student.getforattendance.GetStudentForAttendanceHandler.C
 import com.app.ams.api.student.getforattendance.models.Student
 import com.app.ams.api.subject.get.GetSubjectHandler
 import com.app.ams.api.subject.get.GetSubjectHandler.Companion.asGetSubjectResponse
+import com.app.ams.models.DateDetails
 import com.google.android.material.snackbar.Snackbar
 
 import com.google.android.material.textfield.TextInputEditText
@@ -52,8 +53,6 @@ import kotlin.collections.ArrayList
 
 class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedChangeListener
 {
-    data class DateDetails(val day: Int, val month: Int, val year: Int)
-
     private lateinit var progressBar: ProgressBar
     private lateinit var addAttendanceForm: ConstraintLayout
     private lateinit var insertAttendanceForm: ConstraintLayout
@@ -357,7 +356,7 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
 
     private suspend fun fetchDivisionsAndSubjects(semesterId: Int)
     {
-        val divisionResponse = GetDivisionHandler.getDivisions(context, semesterId)
+        val divisionResponse = GetDivisionHandler.getDivisionsFromSemesterId(context, semesterId)
         val subjectResponse = GetSubjectHandler.getSubjects(context, semesterId)
 
         if (divisionResponse.statusCode == HttpURLConnection.HTTP_UNAUTHORIZED && subjectResponse.statusCode == HttpURLConnection.HTTP_UNAUTHORIZED)

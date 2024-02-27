@@ -26,4 +26,8 @@
     <string name="present">Present</string>
     <string name="absent">Absent</string>
     <string name="today_s_attendance">Today\'s Attendance</string>
+    <string name="faculties">Faculties</string>
+    <string name="students">Students</string>
+    <string name="classes">Classes</string>
+    <string name="total_attendance">Total Attendance</string>
 </resources>

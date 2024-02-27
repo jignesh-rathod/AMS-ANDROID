@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ams.models.DateDetails
 import com.app.ams.R
 import com.app.ams.adapters.AttendanceRVAdapter
 import com.app.ams.api.attendance.get.GetAttendanceHandler
@@ -21,15 +22,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 
 class StudentDashboardFragment : Fragment()
 {
-    data class DateDetails(val day: Int, val month: Int, val year: Int)
-
     private lateinit var rootView: View
     private lateinit var context: Context
 

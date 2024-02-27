@@ -1,15 +1,246 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.DashboardFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/facultiesCard"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Dashboard" />
+        android:layout_height="75dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        app:layout_constraintTop_toTopOf="parent">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvFaculties"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/faculties"
+                android:textColor="@color/primary_light"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="13dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivFaculties"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_people"
+                android:tint="@color/secondary_light"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="13dp"
+                app:layout_constraintTop_toBottomOf="@id/tvFaculties"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="ContentDescription,UseAppTint" />
+
+            <TextView
+                android:id="@+id/tvFacultiesCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="10"
+                android:textColor="@color/primary_light"
+                android:fontFamily="@font/nunito_bold"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:layout_marginStart="30dp"
+                app:layout_constraintStart_toEndOf="@id/ivFaculties"
+                app:layout_constraintTop_toBottomOf="@id/tvFaculties" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/studentsCard"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/facultiesCard">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvStudents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/students"
+                android:textColor="@color/primary_light"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="13dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivStudents"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_people"
+                android:tint="@color/secondary_light"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="13dp"
+                app:layout_constraintTop_toBottomOf="@id/tvStudents"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="ContentDescription,UseAppTint" />
+
+            <TextView
+                android:id="@+id/tvStudentsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="5"
+                android:textColor="@color/primary_light"
+                android:fontFamily="@font/nunito_bold"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:layout_marginStart="30dp"
+                app:layout_constraintStart_toEndOf="@id/ivStudents"
+                app:layout_constraintTop_toBottomOf="@id/tvStudents" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/classesCard"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/studentsCard">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvClasses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/classes"
+                android:textColor="@color/primary_light"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="13dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivClasses"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_class"
+                android:tint="@color/secondary_light"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="13dp"
+                app:layout_constraintTop_toBottomOf="@id/tvClasses"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="ContentDescription,UseAppTint" />
+
+            <TextView
+                android:id="@+id/tvClassesCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="5"
+                android:textColor="@color/primary_light"
+                android:fontFamily="@font/nunito_bold"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:layout_marginStart="30dp"
+                app:layout_constraintStart_toEndOf="@id/ivClasses"
+                app:layout_constraintTop_toBottomOf="@id/tvClasses" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/totalAttendanceCard"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/classesCard">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvTotalAttendance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_attendance"
+                android:textColor="@color/primary_light"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="13dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivTotalAttendance"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_calendar"
+                android:tint="@color/secondary_light"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="13dp"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalAttendance"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="ContentDescription,UseAppTint" />
+
+            <TextView
+                android:id="@+id/tvTotalAttendanceCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="50"
+                android:textColor="@color/primary_light"
+                android:fontFamily="@font/nunito_bold"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:layout_marginStart="30dp"
+                app:layout_constraintStart_toEndOf="@id/ivTotalAttendance"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalAttendance" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvTodayAttendance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/today_s_attendance"
+        android:textColor="@color/primary_light"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/totalAttendanceCard" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAttendance"
+        android:divider="@null"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:listitem="@layout/list_item_for_today_attendance_for_student"
+        android:listSelector="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@id/tvTodayAttendance" />
+</androidx.constraintlayout.widget.ConstraintLayout>

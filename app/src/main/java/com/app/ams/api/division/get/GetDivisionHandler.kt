@@ -9,7 +9,9 @@ class GetDivisionHandler
 {
     companion object
     {
-        fun getDivisions(context: Context, semesterId: Int): ApiResponse = Api.call(path = "/division/get?semesterid=$semesterId", context = context)
+        fun getDivisionsFromSemesterId(context: Context, semesterId: Int): ApiResponse = Api.call(path = "/division/get?semesterid=$semesterId", context = context)
+
+        fun getDivisions(context: Context): ApiResponse = Api.call(path = "/division/get", context = context)
 
         fun ApiResponse.asGetDivisionResponse(): GetDivisionResponse = Gson().fromJson(this.json, GetDivisionResponse::class.java)
     }
