@@ -17,6 +17,7 @@ import android.view.LayoutInflater
 import android.app.DatePickerDialog
 import android.widget.AutoCompleteTextView
 import android.app.DatePickerDialog.OnDateSetListener
+import android.util.DisplayMetrics
 import android.widget.Button
 import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -418,6 +419,10 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
                     withContext(Dispatchers.Main) {
                         studentForAttendanceRVAdapter = StudentForAttendanceRVAdapter(context, R.layout.student_list_item_for_attendance, data.students, this@AttendanceFragment)
 
+                        val layoutParams: ViewGroup.LayoutParams = rvStudents.layoutParams
+                        layoutParams.height = studentForAttendanceRVAdapter.itemCount * dpToPx(91)
+                        rvStudents.layoutParams = layoutParams
+
                         rvStudents.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                         rvStudents.adapter = studentForAttendanceRVAdapter
 
@@ -430,6 +435,12 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
                 }
             }
         }
+    }
+
+    private fun dpToPx(dp: Int): Int
+    {
+        val displayMetrics = context.resources.displayMetrics
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT))
     }
 
     private fun resetAddAttendanceFormFields()

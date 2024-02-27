@@ -32,12 +32,11 @@ class MainActivity : AppCompatActivity()
 
     private lateinit var dashboardFragment: DashboardFragment
     private lateinit var attendanceFragment: AttendanceFragment
+    private lateinit var studentDashboardFragment: StudentDashboardFragment
     private lateinit var profileFragment: ProfileFragment
 
-    private lateinit var studentDashboardFragment: StudentDashboardFragment
-    private lateinit var studentProfileFragment: StudentProfileFragment
-
     private lateinit var userType: String
+    private var isAuthorized: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -60,21 +59,24 @@ class MainActivity : AppCompatActivity()
 
         CoroutineScope(Dispatchers.IO).launch {
             setProfileData()
+
+            if (!isAuthorized)
+                return@launch
+
             setProfileImage(getUserImageName())
 
             setBottomNav(userType)
 
+            profileFragment = ProfileFragment()
             if (userType == Constant.USERTYPE_STUDENT)
             {
                 studentDashboardFragment = StudentDashboardFragment()
-                studentProfileFragment = StudentProfileFragment()
                 setCurrentFragment(studentDashboardFragment)
             }
             else
             {
                 dashboardFragment = DashboardFragment()
                 attendanceFragment = AttendanceFragment()
-                profileFragment = ProfileFragment()
                 setCurrentFragment(dashboardFragment)
             }
 
@@ -101,6 +103,7 @@ class MainActivity : AppCompatActivity()
                 val data = response.asGetProfileResponse()
 
                 withContext(Dispatchers.Main) {
+                    isAuthorized = true
                     userType = data.userType
                     val prefsEditor = getSharedPreferences("ams", MODE_PRIVATE).edit()
 
@@ -190,7 +193,7 @@ class MainActivity : AppCompatActivity()
             when (it.itemId)
             {
                 1 -> setCurrentFragment(studentDashboardFragment)
-                3 -> setCurrentFragment(studentProfileFragment)
+                3 -> setCurrentFragment(profileFragment)
             }
         }
         else

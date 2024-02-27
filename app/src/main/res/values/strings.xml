@@ -19,4 +19,11 @@
     <string name="add">Add</string>
     <string name="insert">Insert</string>
     <string name="cancel">Cancel</string>
+    <string name="total_lectures">Total Lectures</string>
+    <string name="attended_lectures">Attended Lectures</string>
+    <string name="absent_lectures">Absent Lectures</string>
+    <string name="attendance">Attendance (%)</string>
+    <string name="present">Present</string>
+    <string name="absent">Absent</string>
+    <string name="today_s_attendance">Today\'s Attendance</string>
 </resources>

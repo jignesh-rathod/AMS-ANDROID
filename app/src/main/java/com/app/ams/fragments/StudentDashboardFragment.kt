@@ -1,64 +1,139 @@
 package com.app.ams.fragments
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.app.ams.R
+import com.app.ams.adapters.AttendanceRVAdapter
+import com.app.ams.api.attendance.get.GetAttendanceHandler
+import com.app.ams.api.attendance.get.GetAttendanceHandler.Companion.asGetAttendanceResponse
+import com.app.ams.api.attendance.get.models.AttendanceRecord
+import com.app.ams.dialogs.SessionExpireDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.net.HttpURLConnection
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [StudentDashboardFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class StudentDashboardFragment : Fragment()
 {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    data class DateDetails(val day: Int, val month: Int, val year: Int)
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var rootView: View
+    private lateinit var context: Context
+
+    private lateinit var tvTotalLecturesCount: TextView
+    private lateinit var tvAttendedLecturesCount: TextView
+    private lateinit var tvAbsentLecturesCount: TextView
+    private lateinit var tvAttendancePercentageCount: TextView
+    private lateinit var rvAttendance: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View?
+    ): View
     {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_student_dashboard, container, false)
+        rootView = inflater.inflate(R.layout.fragment_student_dashboard, container, false)
+        context = requireContext()
+
+        initialize()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            fetchAttendance()
+        }
+
+        return rootView
     }
 
-    companion object
+    private fun initialize()
     {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment StudentDashboardFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            StudentDashboardFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        tvTotalLecturesCount = rootView.findViewById(R.id.tvTotalLecturesCount)
+        tvAttendedLecturesCount = rootView.findViewById(R.id.tvAttendedLecturesCount)
+        tvAbsentLecturesCount = rootView.findViewById(R.id.tvAbsentLecturesCount)
+        tvAttendancePercentageCount = rootView.findViewById(R.id.tvAttendancePercentageCount)
+        rvAttendance = rootView.findViewById(R.id.rvAttendance)
+    }
+
+    private suspend fun fetchAttendance()
+    {
+        val response = GetAttendanceHandler.getAttendance(context)
+
+        when (response.statusCode)
+        {
+            HttpURLConnection.HTTP_UNAUTHORIZED ->
+            {
+                withContext(Dispatchers.Main) {
+                    SessionExpireDialog.show(context)
                 }
             }
+
+            HttpURLConnection.HTTP_OK ->
+            {
+                val data = response.asGetAttendanceResponse()
+                val todayAttendance = data.attendanceRecords.filter {
+                    isToday(it.date)
+                }
+
+                withContext(Dispatchers.Main) {
+                    tvTotalLecturesCount.text = data.totalLectures.toString()
+                    tvAttendedLecturesCount.text = data.attendedLectures.toString()
+                    tvAbsentLecturesCount.text = data.absentLectures.toString()
+                    tvAttendancePercentageCount.text = data.attendancePercentage.toString()
+
+                    val attendanceRVAdapter = AttendanceRVAdapter(
+                        context,
+                        R.layout.list_item_for_today_attendance_for_student,
+                        ArrayList<AttendanceRecord>(todayAttendance)
+                    )
+
+                    val layoutParams: ViewGroup.LayoutParams = rvAttendance.layoutParams
+                    layoutParams.height = attendanceRVAdapter.itemCount * dpToPx(122)
+                    rvAttendance.layoutParams = layoutParams
+
+                    rvAttendance.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                    rvAttendance.adapter = attendanceRVAdapter
+                }
+            }
+        }
+    }
+
+    private fun dpToPx(dp: Int): Int
+    {
+        val displayMetrics = context.resources.displayMetrics
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT))
+    }
+
+    private fun fetchCurrentDate(): DateDetails
+    {
+        val calendar: Calendar = Calendar.getInstance()
+        val year: Int = calendar.get(Calendar.YEAR)
+        val month: Int = calendar.get(Calendar.MONTH)
+        val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
+
+        return DateDetails(day, month, year)
+    }
+
+    private fun isToday(date: String): Boolean
+    {
+        val currentDate = fetchCurrentDate()
+        val temp = date.split("-")
+        val attendanceDate = DateDetails(
+            day = temp[2].toInt(),
+            month = temp[1].toInt() - 1,
+            year = temp[0].toInt()
+        )
+
+        return currentDate == attendanceDate
     }
 }

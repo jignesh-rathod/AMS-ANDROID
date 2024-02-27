@@ -48,11 +48,13 @@
                 android:id="@+id/btnLogOut"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_logout"
+                android:tint="@color/primary_light"
                 app:layout_constraintTop_toTopOf="@id/topNavLayout"
                 app:layout_constraintBottom_toBottomOf="@id/topNavLayout"
                 app:layout_constraintEnd_toEndOf="@id/topNavLayout"
-                android:layout_marginEnd="5dp"
-                android:src="@drawable/ic_logout"  />
+                tools:ignore="UseAppTint" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -78,6 +80,9 @@
         android:id="@+id/bottomNav"
         android:layout_width="0dp"
         android:layout_height="70dp"
+        android:background="@color/background_light"
+        app:itemIconTint="@color/primary_light"
+        app:itemTextColor="@color/primary_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
