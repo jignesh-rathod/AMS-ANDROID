@@ -12,9 +12,11 @@ import com.app.ams.Constant
 import com.app.ams.R
 import com.app.ams.api.profile.get.GetProfileHandler
 import com.app.ams.api.profile.get.GetProfileHandler.Companion.asGetProfileResponse
+import com.app.ams.api.profile.get.GetProfileResponse
 import com.app.ams.dialogs.SessionExpireDialog
 import com.app.ams.fragments.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,7 +24,6 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
-
 
 class MainActivity : AppCompatActivity()
 {
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity()
     private lateinit var studentDashboardFragment: StudentDashboardFragment
     private lateinit var profileFragment: ProfileFragment
 
-    private lateinit var userType: String
+    private var profileData: GetProfileResponse? = null
     private var isAuthorized: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -58,13 +59,14 @@ class MainActivity : AppCompatActivity()
         btnLogOut.setOnClickListener { logOut() }
 
         CoroutineScope(Dispatchers.IO).launch {
-            setProfileData()
+            fetchProfileData()
 
             if (!isAuthorized)
                 return@launch
 
-            setProfileImage(getUserImageName())
+            displayProfileImage(profileData!!.imageName)
 
+            val userType = profileData!!.userType
             setBottomNav(userType)
 
             profileFragment = ProfileFragment()
@@ -84,7 +86,7 @@ class MainActivity : AppCompatActivity()
         }
     }
 
-    private suspend fun setProfileData()
+    private suspend fun fetchProfileData()
     {
         val response = GetProfileHandler.getProfile(this@MainActivity)
 
@@ -95,41 +97,25 @@ class MainActivity : AppCompatActivity()
                 withContext(Dispatchers.Main) {
                     SessionExpireDialog.show(this@MainActivity)
                 }
-                userType = ""
+                isAuthorized = false
             }
 
             HttpURLConnection.HTTP_OK ->
             {
-                val data = response.asGetProfileResponse()
+                profileData = response.asGetProfileResponse()
 
                 withContext(Dispatchers.Main) {
                     isAuthorized = true
-                    userType = data.userType
                     val prefsEditor = getSharedPreferences("ams", MODE_PRIVATE).edit()
 
-                    prefsEditor.putString("USERTYPE", data.userType)
-                    prefsEditor.putString("NAME", data.name)
-                    prefsEditor.putString("CONTACT", data.contact)
-                    prefsEditor.putString("EMAIL", data.email)
-                    prefsEditor.putString("ADDRESS", data.address)
-                    prefsEditor.putString("IMAGE_NAME", data.imageName)
-
-                    if (data.userType == Constant.USERTYPE_STUDENT)
-                    {
-                        prefsEditor.putString("ENROLLMENT", data.enrollment)
-                        prefsEditor.putString("ROLL_NUMBER", data.rollNumber)
-                        prefsEditor.putString("BATCH", data.batch)
-                        prefsEditor.putString("DIVISION", data.division)
-                        prefsEditor.putInt("SEMESTER", data.semester)
-                    }
-
+                    prefsEditor.putString("USER_DATA", Gson().toJson(profileData))
                     prefsEditor.apply()
                 }
             }
         }
     }
 
-    private suspend fun setProfileImage(imageName: String)
+    private suspend fun displayProfileImage(imageName: String)
     {
         withContext(Dispatchers.IO) {
             try
@@ -168,16 +154,6 @@ class MainActivity : AppCompatActivity()
         }
     }
 
-    private suspend fun getUserImageName(): String
-    {
-        var imageName: String
-        withContext(Dispatchers.Main) {
-            imageName = getSharedPreferences("ams", MODE_PRIVATE).getString("IMAGE_NAME", "").toString()
-        }
-
-        return imageName
-    }
-
     private fun setCurrentFragment(fragment: Fragment)
     {
         supportFragmentManager.beginTransaction().apply {
@@ -188,7 +164,7 @@ class MainActivity : AppCompatActivity()
 
     private fun changeFragment(it: MenuItem): Boolean
     {
-        if (userType == Constant.USERTYPE_STUDENT)
+        if (profileData!!.userType == Constant.USERTYPE_STUDENT)
         {
             when (it.itemId)
             {

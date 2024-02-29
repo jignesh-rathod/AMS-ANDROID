@@ -30,4 +30,11 @@
     <string name="students">Students</string>
     <string name="classes">Classes</string>
     <string name="total_attendance">Total Attendance</string>
+    <string name="email">Email</string>
+    <string name="contact">Contact</string>
+    <string name="address">Address</string>
+    <string name="enrollment">Enrollment</string>
+    <string name="roll_number">Roll Number</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="update_password">Update Password</string>
 </resources>
