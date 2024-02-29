@@ -2,7 +2,6 @@ package com.app.ams.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.DisplayMetrics
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ams.R
+import com.app.ams.Util
 import com.app.ams.adapters.AllAttendanceRVAdapter
 import com.app.ams.api.attendance.getall.GetAllAttendanceHandler
 import com.app.ams.api.attendance.getall.GetAllAttendanceHandler.Companion.asGetAllAttendanceResponse
@@ -20,13 +20,11 @@ import com.app.ams.api.faculty.get.GetFacultyHandler
 import com.app.ams.api.faculty.get.GetFacultyHandler.Companion.asGetFacultyResponse
 import com.app.ams.api.student.get.GetStudentHandler
 import com.app.ams.dialogs.SessionExpireDialog
-import com.app.ams.models.DateDetails
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
-import java.util.*
 import kotlin.collections.ArrayList
 
 class DashboardFragment : Fragment()
@@ -155,7 +153,7 @@ class DashboardFragment : Fragment()
             {
                 val data = response.asGetAllAttendanceResponse()
                 val todayAttendance = data.attendanceRecords.filter {
-                    isToday(it.date)
+                    Util.isToday(it.date)
                 }
 
                 withContext(Dispatchers.Main) {
@@ -168,7 +166,7 @@ class DashboardFragment : Fragment()
                     )
 
                     val layoutParams: ViewGroup.LayoutParams = rvAttendance.layoutParams
-                    layoutParams.height = allAttendanceRVAdapter.itemCount * dpToPx(122)
+                    layoutParams.height = allAttendanceRVAdapter.itemCount * Util.dpToPx(context, 122)
                     rvAttendance.layoutParams = layoutParams
 
                     rvAttendance.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -176,34 +174,5 @@ class DashboardFragment : Fragment()
                 }
             }
         }
-    }
-
-    private fun dpToPx(dp: Int): Int
-    {
-        val displayMetrics = context.resources.displayMetrics
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT))
-    }
-
-    private fun fetchCurrentDate(): DateDetails
-    {
-        val calendar: Calendar = Calendar.getInstance()
-        val year: Int = calendar.get(Calendar.YEAR)
-        val month: Int = calendar.get(Calendar.MONTH)
-        val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
-
-        return DateDetails(day, month, year)
-    }
-
-    private fun isToday(date: String): Boolean
-    {
-        val currentDate = fetchCurrentDate()
-        val temp = date.split("-")
-        val attendanceDate = DateDetails(
-            day = temp[2].toInt(),
-            month = temp[1].toInt() - 1,
-            year = temp[0].toInt()
-        )
-
-        return currentDate == attendanceDate
     }
 }

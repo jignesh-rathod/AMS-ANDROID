@@ -17,17 +17,16 @@ import android.view.LayoutInflater
 import android.app.DatePickerDialog
 import android.widget.AutoCompleteTextView
 import android.app.DatePickerDialog.OnDateSetListener
-import android.util.DisplayMetrics
 import android.widget.Button
 import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-import java.util.*
 import java.net.HttpURLConnection
 
 import com.app.ams.R
+import com.app.ams.Util
 import com.app.ams.adapters.*
 import com.app.ams.api.attendance.add.AddAttendanceHandler
 import com.app.ams.api.attendance.add.AddAttendanceRequest
@@ -45,7 +44,6 @@ import com.app.ams.api.student.getforattendance.GetStudentForAttendanceHandler.C
 import com.app.ams.api.student.getforattendance.models.Student
 import com.app.ams.api.subject.get.GetSubjectHandler
 import com.app.ams.api.subject.get.GetSubjectHandler.Companion.asGetSubjectResponse
-import com.app.ams.models.DateDetails
 import com.google.android.material.snackbar.Snackbar
 
 import com.google.android.material.textfield.TextInputEditText
@@ -98,7 +96,7 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
 
         initialize()
 
-        val date = fetchCurrentDate()
+        val date = Util.getCurrentDate()
         currentDate = "${date.day}/${date.month + 1}/${date.year}"
         selectedDate = "${date.year}-${date.month + 1}-${date.day}"
 
@@ -146,16 +144,6 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
         rvStudents = rootView.findViewById(R.id.rvStudents)
         btnInsert = rootView.findViewById(R.id.btnInsert)
         btnCancel = rootView.findViewById(R.id.btnCancel)
-    }
-
-    private fun fetchCurrentDate(): DateDetails
-    {
-        val calendar: Calendar = Calendar.getInstance()
-        val year: Int = calendar.get(Calendar.YEAR)
-        val month: Int = calendar.get(Calendar.MONTH)
-        val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
-
-        return DateDetails(day, month, year)
     }
 
     private fun showDatePickerDialog(day: Int, month: Int, year: Int)
@@ -419,7 +407,7 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
                         studentForAttendanceRVAdapter = StudentForAttendanceRVAdapter(context, R.layout.student_list_item_for_attendance, data.students, this@AttendanceFragment)
 
                         val layoutParams: ViewGroup.LayoutParams = rvStudents.layoutParams
-                        layoutParams.height = studentForAttendanceRVAdapter.itemCount * dpToPx(91)
+                        layoutParams.height = studentForAttendanceRVAdapter.itemCount * Util.dpToPx(context, 91)
                         rvStudents.layoutParams = layoutParams
 
                         rvStudents.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -436,15 +424,9 @@ class AttendanceFragment : Fragment(), StudentForAttendanceRVAdapter.OnCheckedCh
         }
     }
 
-    private fun dpToPx(dp: Int): Int
-    {
-        val displayMetrics = context.resources.displayMetrics
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT))
-    }
-
     private fun resetAddAttendanceFormFields()
     {
-        val date = fetchCurrentDate()
+        val date = Util.getCurrentDate()
         currentDate = "${date.day}/${date.month + 1}/${date.year}"
         selectedDate = "${date.year}-${date.month + 1}-${date.day}"
         etDate.setText(currentDate)
