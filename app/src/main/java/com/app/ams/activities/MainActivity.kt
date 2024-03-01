@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import com.app.ams.Constant
 import com.app.ams.R
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity()
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?)
     {
-//        installSplashScreen()
+        installSplashScreen()
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

@@ -51,7 +51,7 @@
                 app:layout_constraintStart_toEndOf="@id/userImageCard"
                 android:textSize="30sp"
                 android:textColor="@color/primary_light"
-                android:fontFamily="@font/nunito_bold"
+                android:fontFamily="@font/black_ops_one"
                 android:text="@string/app_name" />
 
             <ImageView
