@@ -1,5 +1,6 @@
 package com.app.ams.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -28,7 +29,7 @@ import java.net.URL
 class MainActivity : AppCompatActivity()
 {
     private lateinit var btnLogOut: ImageView
-    private lateinit var imgProfile: ImageView
+    private lateinit var ivUserImage: ImageView
     private lateinit var bottomNav: BottomNavigationView
 
     private lateinit var dashboardFragment: DashboardFragment
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity()
     private var profileData: GetProfileResponse? = null
     private var isAuthorized: Boolean = false
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?)
     {
 //        installSplashScreen()
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity()
             return
         }
 
-        imgProfile = findViewById(R.id.imgProfile)
+        ivUserImage = findViewById(R.id.ivUserImage)
         bottomNav = findViewById(R.id.bottomNav)
         btnLogOut = findViewById(R.id.btnLogOut)
         btnLogOut.setOnClickListener { logOut() }
@@ -124,12 +126,12 @@ class MainActivity : AppCompatActivity()
                 val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
 
                 withContext(Dispatchers.Main) {
-                    imgProfile.setImageBitmap(bmp)
+                    ivUserImage.setImageBitmap(bmp)
                 }
             } catch (e: IOException)
             {
                 withContext(Dispatchers.Main) {
-                    imgProfile.setImageResource(R.drawable.ic_profile)
+                    ivUserImage.setImageResource(R.drawable.ic_profile)
                 }
             }
         }

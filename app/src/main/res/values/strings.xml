@@ -37,4 +37,12 @@
     <string name="roll_number">Roll Number</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="update_password">Update Password</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_contact">Enter Contact</string>
+    <string name="enter_address">Enter Address</string>
+    <string name="save">Save</string>
+    <string name="submit">Submit</string>
+    <string name="enter_current_password">Enter Current Password</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
 </resources>

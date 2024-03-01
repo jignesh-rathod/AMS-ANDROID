@@ -11,16 +11,25 @@
         android:id="@+id/profile"
         android:visibility="visible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/ivUserImage"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/userImageCard"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="50dp"
+            app:cardCornerRadius="50dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/ivUserImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tvName"
@@ -31,9 +40,9 @@
             android:textSize="25sp"
             android:fontFamily="@font/poppins_semibold"
             android:textColor="@color/primary_light"
-            app:layout_constraintTop_toBottomOf="@id/ivUserImage"
+            app:layout_constraintTop_toBottomOf="@id/userImageCard"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/tvUserType"
@@ -45,7 +54,7 @@
             android:textColor="@color/secondary_light"
             app:layout_constraintTop_toBottomOf="@id/tvName"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/emailCard"
@@ -393,7 +402,7 @@
             app:shapeAppearanceOverlay="@style/DefaultButton"
             android:layout_marginVertical="10dp"
             android:text="@string/edit_profile"
-            app:layout_constraintTop_toBottomOf="@id/semesterCard"/>
+            app:layout_constraintTop_toBottomOf="@id/semesterCard" />
 
         <Button
             android:id="@+id/btnUpdatePassword"
@@ -405,6 +414,187 @@
             app:shapeAppearanceOverlay="@style/DefaultButton"
             android:layout_marginVertical="10dp"
             android:text="@string/update_password"
-            app:layout_constraintTop_toBottomOf="@id/btnEditProfile"/>
+            app:layout_constraintTop_toBottomOf="@id/btnEditProfile" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/editProfile"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEmailLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_email"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:textColor="@color/secondary_light"
+                android:inputType="text"
+                tools:ignore="Autofill,LabelFor,TextFields" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilContactLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/enter_contact"
+            app:layout_constraintTop_toBottomOf="@id/tilEmailLabel">
+
+            <EditText
+                android:id="@+id/etContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:textColor="@color/secondary_light"
+                android:inputType="text"
+                tools:ignore="Autofill,LabelFor,TextFields" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilAddressLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/enter_address"
+            app:layout_constraintTop_toBottomOf="@id/tilContactLabel">
+
+            <EditText
+                android:id="@+id/etAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:textColor="@color/secondary_light"
+                android:inputType="text"
+                tools:ignore="Autofill,LabelFor,TextFields" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="7dp"
+            android:text="@string/save"
+            android:textSize="20sp"
+            android:fontFamily="@font/nunito_bold"
+            app:shapeAppearanceOverlay="@style/DefaultButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilAddressLabel"
+            app:layout_constraintEnd_toStartOf="@id/btnProfileCancel" />
+
+        <Button
+            android:id="@+id/btnProfileCancel"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="7dp"
+            android:text="@string/cancel"
+            android:textSize="20sp"
+            android:fontFamily="@font/nunito_bold"
+            app:shapeAppearanceOverlay="@style/DefaultButton"
+            app:layout_constraintTop_toBottomOf="@id/tilAddressLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnSave" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/updatePassword"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilCurrentPasswordLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_current_password"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/etCurrentPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:textColor="@color/secondary_light"
+                android:inputType="textPassword"
+                tools:ignore="Autofill,LabelFor,TextFields" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilNewPasswordLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/enter_new_password"
+            app:layout_constraintTop_toBottomOf="@id/tilCurrentPasswordLabel">
+
+            <EditText
+                android:id="@+id/etNewPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:textColor="@color/secondary_light"
+                android:inputType="textPassword"
+                tools:ignore="Autofill,LabelFor,TextFields" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilConfirmPasswordLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/confirm_new_password"
+            app:layout_constraintTop_toBottomOf="@id/tilNewPasswordLabel">
+
+            <EditText
+                android:id="@+id/etConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:textColor="@color/secondary_light"
+                android:inputType="textPassword"
+                tools:ignore="Autofill,LabelFor,TextFields" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="7dp"
+            android:text="@string/submit"
+            android:textSize="20sp"
+            android:fontFamily="@font/nunito_bold"
+            app:shapeAppearanceOverlay="@style/DefaultButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilConfirmPasswordLabel"
+            app:layout_constraintEnd_toStartOf="@id/btnPasswordCancel" />
+
+        <Button
+            android:id="@+id/btnPasswordCancel"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="7dp"
+            android:text="@string/cancel"
+            android:textSize="20sp"
+            android:fontFamily="@font/nunito_bold"
+            app:shapeAppearanceOverlay="@style/DefaultButton"
+            app:layout_constraintTop_toBottomOf="@id/tilConfirmPasswordLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnSubmit"
+            tools:ignore="DuplicateIds" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

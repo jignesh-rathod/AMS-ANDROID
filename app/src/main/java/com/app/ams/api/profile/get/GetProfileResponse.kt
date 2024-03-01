@@ -8,8 +8,8 @@ data class GetProfileResponse(
     val division: String,
     val semester: Int,
     val name: String,
-    val contact: String,
-    val email: String,
-    val address: String,
-    val imageName: String
+    var contact: String,
+    var email: String,
+    var address: String,
+    var imageName: String
 )

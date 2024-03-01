@@ -23,14 +23,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imgProfile"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/userImageCard"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
+                android:layout_marginStart="7dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
                 app:layout_constraintTop_toTopOf="@id/topNavLayout"
                 app:layout_constraintBottom_toBottomOf="@id/topNavLayout"
-                app:layout_constraintStart_toStartOf="@id/topNavLayout"
-                android:layout_marginStart="7dp" />
+                app:layout_constraintStart_toStartOf="@id/topNavLayout">
+
+                <ImageView
+                    android:id="@+id/ivUserImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:ignore="ContentDescription" />
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,7 +48,7 @@
                 app:layout_constraintTop_toTopOf="@id/topNavLayout"
                 app:layout_constraintBottom_toBottomOf="@id/topNavLayout"
                 app:layout_constraintEnd_toStartOf="@id/btnLogOut"
-                app:layout_constraintStart_toEndOf="@id/imgProfile"
+                app:layout_constraintStart_toEndOf="@id/userImageCard"
                 android:textSize="30sp"
                 android:textColor="@color/primary_light"
                 android:fontFamily="@font/nunito_bold"
