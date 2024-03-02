@@ -212,6 +212,28 @@ class ProfileFragment : Fragment()
 
     private fun handleSave()
     {
+        if (newProfileData!!.contact.isNotBlank())
+        {
+            val pattern = Regex("^[0-9]{10}$")
+            val matches = pattern.find(newProfileData!!.contact)
+            if (matches == null)
+            {
+                Snackbar.make(btnSave, "Enter valid mobile number.", Snackbar.LENGTH_LONG).show()
+                return
+            }
+        }
+
+        if (newProfileData!!.email.isNotBlank())
+        {
+            val pattern = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+\$")
+            val matches = pattern.find(newProfileData!!.email)
+            if (matches == null)
+            {
+                Snackbar.make(btnSave, "Enter valid email.", Snackbar.LENGTH_LONG).show()
+                return
+            }
+        }
+
         CoroutineScope(Dispatchers.IO).launch {
             val response = UpdateProfileHandler.updateProfile(context, newProfileData!!)
 
