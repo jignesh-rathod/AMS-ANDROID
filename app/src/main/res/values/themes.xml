@@ -29,4 +29,10 @@
     <style name="DefaultButton">
         <item name="cornerSize">5dp</item>
     </style>
+
+    <!-- BottomNav styles -->
+    <style name="BottomNavTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+    </style>
+
 </resources>
