@@ -20,7 +20,7 @@
 
         <item name="android:windowSplashScreenBackground" tools:ignore="NewApi">@color/background_light</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen_logo</item>
-        <item name="windowSplashScreenAnimationDuration">500</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
         <item name="postSplashScreenTheme">@style/Theme.AMS</item>
 
     </style>
