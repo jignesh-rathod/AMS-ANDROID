@@ -1,3 +1,48 @@
 <resources>
     <string name="app_name">AMS</string>
+
+    <string name="enter_username">Enter username</string>
+    <string name="enter_password">Enter password</string>
+
+    <string name="login">Login</string>
+    <string name="loading">Loading…</string>
+    <string name="log_out">Log Out</string>
+    <string name="app_logo">App Logo</string>
+    <string name="login_to_continue">Login to continue</string>
+    <string name="enter_your_username_and_password_to_login"><![CDATA[Enter your username & password to login]]></string>
+    <string name="batch">Batch</string>
+    <string name="semester">Semester</string>
+    <string name="division">Division</string>
+    <string name="subject">Subject</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
+    <string name="add">Add</string>
+    <string name="insert">Insert</string>
+    <string name="cancel">Cancel</string>
+    <string name="total_lectures">Total Lectures</string>
+    <string name="attended_lectures">Attended Lectures</string>
+    <string name="absent_lectures">Absent Lectures</string>
+    <string name="attendance">Attendance (%)</string>
+    <string name="present">Present</string>
+    <string name="absent">Absent</string>
+    <string name="today_s_attendance">Today\'s Attendance</string>
+    <string name="faculties">Faculties</string>
+    <string name="students">Students</string>
+    <string name="classes">Classes</string>
+    <string name="total_attendance">Total Attendance</string>
+    <string name="email">Email</string>
+    <string name="contact">Contact</string>
+    <string name="address">Address</string>
+    <string name="enrollment">Enrollment</string>
+    <string name="roll_number">Roll Number</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="update_password">Update Password</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_contact">Enter Contact</string>
+    <string name="enter_address">Enter Address</string>
+    <string name="save">Save</string>
+    <string name="submit">Submit</string>
+    <string name="enter_current_password">Enter Current Password</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
 </resources>
